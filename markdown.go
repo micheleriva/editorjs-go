@@ -92,7 +92,7 @@ func generateList(el EditorJSData) string {
 		}
 	} else {
 		for i, el := range el.Items {
-			n := strconv.Itoa(i) + "."
+			n := strconv.Itoa(i+1) + "."
 			result = append(result, fmt.Sprintf("%s %s", n, el))
 		}
 	}
@@ -125,7 +125,7 @@ func generateImage(el EditorJSData, options Options) string {
 		withBackground = "editorjs-withBackground"
 	}
 
-	return fmt.Sprintf(`<img src="%s" alt="%s" class="%s %s %s" />`, el.File.URL, el.Caption, withBorder, stretched, withBackground)
+	return fmt.Sprintf(`<img src="%s" alt="%s" class="%s %s %s" />`, el.File.URL, options.Image.Caption, withBorder, stretched, withBackground)
 }
 
 func generateTable(el EditorJSData) string {
@@ -140,9 +140,5 @@ func generateTable(el EditorJSData) string {
 }
 
 func generateCaption(el EditorJSData) string {
-	if el.Alignment == "left" {
-		return fmt.Sprintf("> %s", el.Text)
-	}
-
-	return fmt.Sprintf(`<span style='text-align:center;width="100%"'>%s</span>`, el.Text)
+	return fmt.Sprintf("> %s", el.Text)
 }
