@@ -48,7 +48,7 @@ func main() {
 		log.Fatal(err)
   }
   
-	resultMarkdown := editorjs.Markdown(string(data))
+  resultMarkdown := editorjs.Markdown(string(data))
   resultHTML := editorjs.HTML(string(data))
 
   fmt.Println("=== MARKDOWN ===\n")
