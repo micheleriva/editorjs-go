@@ -1,0 +1,1 @@
+<img src="/misc/cover.png" alt="Editorjs.go" />
