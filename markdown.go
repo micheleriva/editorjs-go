@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 )
@@ -33,19 +34,36 @@ func Markdown(input string, options ...Options) string {
 
 	for _, el := range editorJSAST.Blocks {
 
+		data := el.Data
+
 		switch el.Type {
 
 		case "header":
-			result = append(result, generateHeader(el.Data))
+			result = append(result, generateHeader(data))
 
 		case "paragraph":
-			result = append(result, el.Data.Text)
+			result = append(result, data.Text)
 
 		case "list":
-			result = append(result, generateList(el.Data))
+			result = append(result, generateList(data))
 
 		case "image":
-			result = append(result, generateImage(el.Data, markdownOptions))
+			result = append(result, generateImage(data, markdownOptions))
+
+		case "rawTool":
+			result = append(result, data.HTML)
+
+		case "delimiter":
+			result = append(result, "---")
+
+		case "table":
+			result = append(result, generateTable(data))
+
+		case "caption":
+			result = append(result, generateCaption(data))
+
+		default:
+			log.Fatal("Unknown data type: " + el.Type)
 		}
 
 	}
@@ -108,5 +126,23 @@ func generateImage(el EditorJSData, options Options) string {
 	}
 
 	return fmt.Sprintf(`<img src="%s" alt="%s" class="%s %s %s" />`, el.File.URL, el.Caption, withBorder, stretched, withBackground)
+}
 
+func generateTable(el EditorJSData) string {
+	var result []string
+
+	for _, cell := range el.Content {
+		row := strings.Join(cell, " | ")
+		result = append(result, fmt.Sprintf("| %s |", row))
+	}
+
+	return strings.Join(result, "\n")
+}
+
+func generateCaption(el EditorJSData) string {
+	if el.Alignment == "left" {
+		return fmt.Sprintf("> %s", el.Text)
+	}
+
+	return fmt.Sprintf(`<span style='text-align:center;width="100%"'>%s</span>`, el.Text)
 }
