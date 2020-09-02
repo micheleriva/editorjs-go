@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGenerateHeader(t *testing.T) {
+func TestGenerateHeaderMD(t *testing.T) {
 
 	// Test H1 Header
 	input1 := EditorJSData{
@@ -15,7 +15,7 @@ func TestGenerateHeader(t *testing.T) {
 	}
 
 	expected1 := "# Level 1 Header"
-	actual1 := generateHeader(input1)
+	actual1 := generateMDHeader(input1)
 
 	// Test H2 Header
 	input2 := EditorJSData{
@@ -24,7 +24,7 @@ func TestGenerateHeader(t *testing.T) {
 	}
 
 	expected2 := "## Level 2 Header"
-	actual2 := generateHeader(input2)
+	actual2 := generateMDHeader(input2)
 
 	// Test H3 Header
 	input3 := EditorJSData{
@@ -33,7 +33,7 @@ func TestGenerateHeader(t *testing.T) {
 	}
 
 	expected3 := "### Level 3 Header"
-	actual3 := generateHeader(input3)
+	actual3 := generateMDHeader(input3)
 
 	// Test H4 Header
 	input4 := EditorJSData{
@@ -42,7 +42,7 @@ func TestGenerateHeader(t *testing.T) {
 	}
 
 	expected4 := "#### Level 4 Header"
-	actual4 := generateHeader(input4)
+	actual4 := generateMDHeader(input4)
 
 	assert.Equal(t, expected1, actual1)
 	assert.Equal(t, expected2, actual2)
@@ -50,7 +50,7 @@ func TestGenerateHeader(t *testing.T) {
 	assert.Equal(t, expected4, actual4)
 }
 
-func TestGenerateUnorderedList(t *testing.T) {
+func TestGenerateUnorderedListMD(t *testing.T) {
 	input := EditorJSData{
 		Style: "unordered",
 		Items: []string{"first", "second", "third"},
@@ -60,12 +60,12 @@ func TestGenerateUnorderedList(t *testing.T) {
 - second
 - third`
 
-	actual := generateList(input)
+	actual := generateMDList(input)
 
 	assert.Equal(t, expected, actual)
 }
 
-func TestGenerateOrderedList(t *testing.T) {
+func TestGenerateOrderedListMD(t *testing.T) {
 	input := EditorJSData{
 		Style: "ordered",
 		Items: []string{"first", "second", "third"},
@@ -75,12 +75,12 @@ func TestGenerateOrderedList(t *testing.T) {
 2. second
 3. third`
 
-	actual := generateList(input)
+	actual := generateMDList(input)
 
 	assert.Equal(t, expected, actual)
 }
 
-func TestGenerateImageWithoutOptions(t *testing.T) {
+func TestGenerateImageWithoutOptionsMD(t *testing.T) {
 	input := EditorJSData{
 		File: FileData{
 			URL: "https://example.com/img.png",
@@ -88,12 +88,12 @@ func TestGenerateImageWithoutOptions(t *testing.T) {
 	}
 
 	expected := `![](https://example.com/img.png)`
-	actual := generateImage(input, Options{})
+	actual := generateMDImage(input, Options{})
 
 	assert.Equal(t, expected, actual)
 }
 
-func TestGenerateImageWithPartialOptions(t *testing.T) {
+func TestGenerateImageWithPartialOptionsMD(t *testing.T) {
 	input := EditorJSData{
 		File: FileData{
 			URL: "https://example.com/img.png",
@@ -107,12 +107,12 @@ func TestGenerateImageWithPartialOptions(t *testing.T) {
 	}
 
 	expected := `![My beautiful image](https://example.com/img.png)`
-	actual := generateImage(input, options)
+	actual := generateMDImage(input, options)
 
 	assert.Equal(t, expected, actual)
 }
 
-func TestGenerateImageWithFullOptions(t *testing.T) {
+func TestGenerateImageWithFullOptionsMD(t *testing.T) {
 	input := EditorJSData{
 		File: FileData{
 			URL: "https://example.com/img.png",
@@ -131,7 +131,7 @@ func TestGenerateImageWithFullOptions(t *testing.T) {
 	}
 
 	expected := `<img src="https://example.com/img.png" alt="My beautiful image" class="with-border-class streched-class with-background-class" />`
-	actual := generateImage(input, options)
+	actual := generateMDImage(input, options)
 
 	assert.Equal(t, expected, actual)
 }
