@@ -7,21 +7,6 @@ import (
 	"strings"
 )
 
-type Options struct {
-	Image ImageOptions
-}
-
-type ImageOptions struct {
-	Classes ImageClasses
-	Caption string
-}
-
-type ImageClasses struct {
-	WithBorder     string
-	Stretched      string
-	WithBackground string
-}
-
 func Markdown(input string, options ...Options) string {
 	var markdownOptions Options
 
