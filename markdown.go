@@ -7,21 +7,6 @@ import (
 	"strings"
 )
 
-type Options struct {
-	Image ImageOptions
-}
-
-type ImageOptions struct {
-	Classes ImageClasses
-	Caption string
-}
-
-type ImageClasses struct {
-	WithBorder     string
-	Stretched      string
-	WithBackground string
-}
-
 func Markdown(input string, options ...Options) string {
 	var markdownOptions Options
 
@@ -39,16 +24,16 @@ func Markdown(input string, options ...Options) string {
 		switch el.Type {
 
 		case "header":
-			result = append(result, generateHeader(data))
+			result = append(result, generateMDHeader(data))
 
 		case "paragraph":
 			result = append(result, data.Text)
 
 		case "list":
-			result = append(result, generateList(data))
+			result = append(result, generateMDList(data))
 
 		case "image":
-			result = append(result, generateImage(data, markdownOptions))
+			result = append(result, generateMDImage(data, markdownOptions))
 
 		case "rawTool":
 			result = append(result, data.HTML)
@@ -57,10 +42,10 @@ func Markdown(input string, options ...Options) string {
 			result = append(result, "---")
 
 		case "table":
-			result = append(result, generateTable(data))
+			result = append(result, generateMDTable(data))
 
 		case "caption":
-			result = append(result, generateCaption(data))
+			result = append(result, generateMDCaption(data))
 
 		default:
 			log.Fatal("Unknown data type: " + el.Type)
@@ -71,7 +56,7 @@ func Markdown(input string, options ...Options) string {
 	return strings.Join(result[:], "\n\n")
 }
 
-func generateHeader(el EditorJSData) string {
+func generateMDHeader(el EditorJSData) string {
 	var result []string
 
 	for i := 0; i < el.Level; i++ {
@@ -83,7 +68,7 @@ func generateHeader(el EditorJSData) string {
 	return strings.Join(result[:], "")
 }
 
-func generateList(el EditorJSData) string {
+func generateMDList(el EditorJSData) string {
 	var result []string
 
 	if el.Style == "unordered" {
@@ -100,7 +85,7 @@ func generateList(el EditorJSData) string {
 	return strings.Join(result[:], "\n")
 }
 
-func generateImage(el EditorJSData, options Options) string {
+func generateMDImage(el EditorJSData, options Options) string {
 	classes := options.Image.Classes
 	withBorder := classes.WithBorder
 	stretched := classes.Stretched
@@ -128,7 +113,7 @@ func generateImage(el EditorJSData, options Options) string {
 	return fmt.Sprintf(`<img src="%s" alt="%s" class="%s %s %s" />`, el.File.URL, options.Image.Caption, withBorder, stretched, withBackground)
 }
 
-func generateTable(el EditorJSData) string {
+func generateMDTable(el EditorJSData) string {
 	var result []string
 
 	for _, cell := range el.Content {
@@ -139,6 +124,6 @@ func generateTable(el EditorJSData) string {
 	return strings.Join(result, "\n")
 }
 
-func generateCaption(el EditorJSData) string {
+func generateMDCaption(el EditorJSData) string {
 	return fmt.Sprintf("> %s", el.Text)
 }

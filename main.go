@@ -1,17 +1,20 @@
 package main
 
-import (
-	"fmt"
-	"io/ioutil"
-	"log"
-)
+type Options struct {
+	Image ImageOptions
+}
+
+type ImageOptions struct {
+	Classes ImageClasses
+	Caption string
+}
+
+type ImageClasses struct {
+	WithBorder     string
+	Stretched      string
+	WithBackground string
+}
 
 func main() {
-	data, err := ioutil.ReadFile("./tests/mocks/mock1.json")
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	result := Markdown(string(data))
-	fmt.Println(result)
 }

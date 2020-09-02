@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGenerateHeaderMD(t *testing.T) {
+func TestGenerateHeaderHTML(t *testing.T) {
 
 	// Test H1 Header
 	input1 := EditorJSData{
@@ -14,8 +14,8 @@ func TestGenerateHeaderMD(t *testing.T) {
 		Level: 1,
 	}
 
-	expected1 := "# Level 1 Header"
-	actual1 := generateMDHeader(input1)
+	expected1 := "<h1>Level 1 Header</h1>"
+	actual1 := generateHTMLHeader(input1)
 
 	// Test H2 Header
 	input2 := EditorJSData{
@@ -23,8 +23,8 @@ func TestGenerateHeaderMD(t *testing.T) {
 		Level: 2,
 	}
 
-	expected2 := "## Level 2 Header"
-	actual2 := generateMDHeader(input2)
+	expected2 := "<h2>Level 2 Header</h2>"
+	actual2 := generateHTMLHeader(input2)
 
 	// Test H3 Header
 	input3 := EditorJSData{
@@ -32,8 +32,8 @@ func TestGenerateHeaderMD(t *testing.T) {
 		Level: 3,
 	}
 
-	expected3 := "### Level 3 Header"
-	actual3 := generateMDHeader(input3)
+	expected3 := "<h3>Level 3 Header</h3>"
+	actual3 := generateHTMLHeader(input3)
 
 	// Test H4 Header
 	input4 := EditorJSData{
@@ -41,8 +41,8 @@ func TestGenerateHeaderMD(t *testing.T) {
 		Level: 4,
 	}
 
-	expected4 := "#### Level 4 Header"
-	actual4 := generateMDHeader(input4)
+	expected4 := "<h4>Level 4 Header</h4>"
+	actual4 := generateHTMLHeader(input4)
 
 	assert.Equal(t, expected1, actual1)
 	assert.Equal(t, expected2, actual2)
@@ -50,50 +50,65 @@ func TestGenerateHeaderMD(t *testing.T) {
 	assert.Equal(t, expected4, actual4)
 }
 
-func TestGenerateUnorderedListMD(t *testing.T) {
+func TestGenerateHTMLParagraph(t *testing.T) {
+	input := EditorJSData{
+		Text: "I am a paragraph!",
+	}
+
+	expected := "<p>I am a paragraph!</p>"
+	actual := generateHTMLParagraph(input)
+
+	assert.Equal(t, expected, actual)
+}
+
+func TestGenerateHTMLUnorderedList(t *testing.T) {
 	input := EditorJSData{
 		Style: "unordered",
 		Items: []string{"first", "second", "third"},
 	}
 
-	expected := `- first
-- second
-- third`
+	expected := `<ul>
+  <li>first</li>
+  <li>second</li>
+  <li>third</li>
+</ul>`
 
-	actual := generateMDList(input)
+	actual := generateHTMLList(input)
 
 	assert.Equal(t, expected, actual)
 }
 
-func TestGenerateOrderedListMD(t *testing.T) {
+func TestGenerateHTMLOrderedList(t *testing.T) {
 	input := EditorJSData{
 		Style: "ordered",
 		Items: []string{"first", "second", "third"},
 	}
 
-	expected := `1. first
-2. second
-3. third`
+	expected := `<ol>
+  <li>first</li>
+  <li>second</li>
+  <li>third</li>
+</ol>`
 
-	actual := generateMDList(input)
+	actual := generateHTMLList(input)
 
 	assert.Equal(t, expected, actual)
 }
 
-func TestGenerateImageWithoutOptionsMD(t *testing.T) {
+func TestGenerateImageWithoutOptionsHTML(t *testing.T) {
 	input := EditorJSData{
 		File: FileData{
 			URL: "https://example.com/img.png",
 		},
 	}
 
-	expected := `![](https://example.com/img.png)`
-	actual := generateMDImage(input, Options{})
+	expected := `<img src="https://example.com/img.png" alt="" class="  " />`
+	actual := generateHTMLImage(input, Options{})
 
 	assert.Equal(t, expected, actual)
 }
 
-func TestGenerateImageWithPartialOptionsMD(t *testing.T) {
+func TestGenerateImageWithPartialOptionsHTML(t *testing.T) {
 	input := EditorJSData{
 		File: FileData{
 			URL: "https://example.com/img.png",
@@ -106,13 +121,13 @@ func TestGenerateImageWithPartialOptionsMD(t *testing.T) {
 		},
 	}
 
-	expected := `![My beautiful image](https://example.com/img.png)`
-	actual := generateMDImage(input, options)
+	expected := `<img src="https://example.com/img.png" alt="My beautiful image" class="  " />`
+	actual := generateHTMLImage(input, options)
 
 	assert.Equal(t, expected, actual)
 }
 
-func TestGenerateImageWithFullOptionsMD(t *testing.T) {
+func TestGenerateImageWithFullOptionsHTML(t *testing.T) {
 	input := EditorJSData{
 		File: FileData{
 			URL: "https://example.com/img.png",
@@ -131,7 +146,7 @@ func TestGenerateImageWithFullOptionsMD(t *testing.T) {
 	}
 
 	expected := `<img src="https://example.com/img.png" alt="My beautiful image" class="with-border-class streched-class with-background-class" />`
-	actual := generateMDImage(input, options)
+	actual := generateHTMLImage(input, options)
 
 	assert.Equal(t, expected, actual)
 }
