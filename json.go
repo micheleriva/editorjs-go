@@ -15,7 +15,7 @@ type EditorJSBlock struct {
 }
 
 type EditorJSData struct {
-	Text           string     `json:"text",omitempty`
+	Text           string     `json:"text,omitempty"`
 	Level          int        `json:"level,omitempty" `
 	Style          string     `json:"style,omitempty" `
 	Items          []string   `json:"items,omitempty" `
